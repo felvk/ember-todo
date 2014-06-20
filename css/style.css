@@ -25,7 +25,7 @@ body {
 	line-height: 1.4em;
 	background: #eaeaea url('bg.png');
 	color: #4d4d4d;
-	width: 550px;
+	width: 90%;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
@@ -196,7 +196,7 @@ label[for='toggle-all'] {
 
 #todo-list li.editing .edit {
 	display: block;
-	width: 506px;
+	width: calc(100% - 42px);
 	padding: 13px 17px 12px 17px;
 	margin: 0 0 0 43px;
 }
@@ -329,6 +329,18 @@ label[for='toggle-all'] {
 #todo-count {
 	float: left;
 	text-align: left;
+}
+
+@media only screen and (max-width: 480px) {
+	#todo-count {
+		display: block;
+	}
+	#clear-completed {
+		width: 100%;
+		float: none;
+		margin-top: 9px;
+		line-height: 30px !important;
+	}
 }
 
 #filters {
