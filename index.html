@@ -20,33 +20,51 @@
       </header>
 
       <section id="main">
-        <ul id="todo-list">
-          {{#each}}
-            <li {{bind-attr class="isCompleted:completed"}}>
-              <input type="checkbox" class="toggle">
-              <label>{{title}}</label><button class="destroy"></button>
-            </li>
-          {{/each}}
-        </ul>
-        <input type="checkbox" id="toggle-all">
+        {{outlet}}
+
+        {{input type="checkbox" id="toggle-all" checked=allAreDone}}
       </section>
 
       <footer id="footer">
         <span id="todo-count">
-          <strong>2</strong> todos left
+          <strong>{{remaining}}</strong> {{inflection}} left
+          <!-- siehe Todos.Controller -->
         </span>
         <ul id="filters">
-          <li><a href="all">All</a></li>
-          <li><a href="active">Active</a></li>
-          <li><a href="completed">Complete</a></li>
+          <li>
+            {{#link-to "todos.index" activeClass="selected"}}All{{/link-to}}
+          </li>
+          <li>
+            {{#link-to "todos.active" activeClass="selected"}}Active{{/link-to}}
+          </li>
+          <li>
+            {{#link-to "todos.completed" activeClass="selected"}}Complete{{/link-to}}
+          </li>
         </ul>
-        <button id="clear-completed">Clear completed (1)</button>
+        {{#if hasCompleted}}
+          <button id="clear-completed" {{action "clearCompleted"}}>Clear completed ({{completed}})</button>
+        {{/if}}
       </footer>
     </section>
 
     <footer id="info">
       <p>Double-click to edit a todo</p>
     </footer>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="todos/index">
+    <ul id="todo-list">
+      {{#each itemController="todo"}}
+        <li {{bind-attr class="isCompleted:completed isEditing:editing"}}>
+          {{#if isEditing}}
+            {{edit-todo class="edit" value=title focus-out="acceptChanges" insert-newline="acceptChanges"}}
+          {{else}}
+            {{input type="checkbox" checked=isCompleted class="toggle"}}
+            <label {{action "editTodo" on="doubleClick"}}>{{title}}</label><button {{action "removeTodo"}} class="destroy"></button>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
   </script>
 
 
@@ -56,10 +74,13 @@
   <script src="js/libs/ember-1.5.1.js"></script>
   <!-- script src="js/libs/ember-1.3.0.js"></script -->
   <script src="js/libs/ember-data.js"></script>
+  <script src="js/libs/localstorage_adapter.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/router.js"></script>
   <script src="js/models/todo.js"></script>
   <script src="js/controllers/todos_controller.js"></script>
+  <script src="js/controllers/todo_controller.js"></script>
+  <script src="js/views/edit_todo_view.js"></script>
 </body>
 </html>
